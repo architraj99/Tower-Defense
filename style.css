@@ -24,6 +24,7 @@ body {
     background: #2e8b57;
     position: relative;
     border: 4px solid #fff;
+    overflow: hidden;
 }
 
 .path {
@@ -32,6 +33,16 @@ body {
     width: 100%;
     height: 80px;
     background: #d2b48c;
+}
+
+.enemy {
+    width: 35px;
+    height: 35px;
+    background: crimson;
+    border-radius: 50%;
+    position: absolute;
+    top: 232px;
+    left: -40px;
 }
 
 .sidebar {

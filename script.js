@@ -2,8 +2,40 @@ const gold = document.getElementById("gold");
 const lives = document.getElementById("lives");
 const wave = document.getElementById("wave");
 const startBtn = document.getElementById("startBtn");
+const gameBoard = document.getElementById("gameBoard");
+
+let gameStarted = false;
+
+function createEnemy() {
+
+    const enemy = document.createElement("div");
+    enemy.classList.add("enemy");
+
+    let position = -40;
+    gameBoard.appendChild(enemy);
+
+    const moveEnemy = setInterval(() => {
+
+        position += 2;
+        enemy.style.left = position + "px";
+
+        if(position > 700) {
+
+            clearInterval(moveEnemy);
+            enemy.remove();
+            lives.textContent = Number(lives.textContent) - 1;
+        }
+    }, 20);
+}
 
 startBtn.addEventListener("click", () => {
-    
-    startBtn.textContent = "Game Started";
+
+    if(gameStarted) {
+        return;
+    }
+
+    gameStarted = true;
+    startBtn.textContent = "Game Running";
+
+    createEnemy();
 });
