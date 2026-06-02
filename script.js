@@ -5,6 +5,7 @@ const startBtn = document.getElementById("startBtn");
 const gameBoard = document.getElementById("gameBoard");
 
 let gameStarted = false;
+let currentWave = 1;
 
 function createEnemy() {
 
@@ -28,6 +29,22 @@ function createEnemy() {
     }, 20);
 }
 
+function startWave() {
+
+    let spawned = 0;
+    const waveSize = 5 + currentWave;
+
+    const waveInterval = setInterval(() => {
+
+        createEnemy();
+        spawned++;
+        if(spawned >= waveSize) {
+
+            clearInterval(waveInterval);
+        }
+    }, 1000);
+}
+
 startBtn.addEventListener("click", () => {
 
     if(gameStarted) {
@@ -35,7 +52,8 @@ startBtn.addEventListener("click", () => {
     }
 
     gameStarted = true;
-    startBtn.textContent = "Game Running";
+    startBtn.textContent = "Wave Running";
+    wave.textContent = currentWave;
 
-    createEnemy();
+    startWave();
 });
