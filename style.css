@@ -45,6 +45,15 @@ body {
     left: -40px;
 }
 
+.enemy-health {
+    position: absolute;
+    width: 35px;
+    height: 4px;
+    background: limegreen;
+    top: -8px;
+    left: 0;
+}
+
 .tower {
     width: 45px;
     height: 45px;
@@ -52,6 +61,14 @@ body {
     border-radius: 8px;
     position: absolute;
     transform: translate(-50%, -50%);
+}
+
+.bullet {
+    width: 10px;
+    height: 10px;
+    background: yellow;
+    border-radius: 50%;
+    position: absolute;
 }
 
 .sidebar {
