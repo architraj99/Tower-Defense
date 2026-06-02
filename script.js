@@ -38,12 +38,40 @@ function startWave() {
 
         createEnemy();
         spawned++;
+
         if(spawned >= waveSize) {
 
             clearInterval(waveInterval);
         }
     }, 1000);
 }
+
+function placeTower(x, y) {
+
+    const currentGold = Number(gold.textContent);
+
+    if(currentGold < 20) {
+        return;
+    }
+
+    const tower = document.createElement("div");
+    tower.classList.add("tower");
+    tower.style.left = x + "px";
+    tower.style.top = y + "px";
+
+    gameBoard.appendChild(tower);
+    gold.textContent = currentGold - 20;
+}
+
+gameBoard.addEventListener("click", (event) => {
+
+    const rect = gameBoard.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    placeTower(x, y);
+});
 
 startBtn.addEventListener("click", () => {
 

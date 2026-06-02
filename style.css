@@ -45,6 +45,15 @@ body {
     left: -40px;
 }
 
+.tower {
+    width: 45px;
+    height: 45px;
+    background: #2563eb;
+    border-radius: 8px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
 .sidebar {
     width: 220px;
     background: white;
