@@ -2,9 +2,11 @@ const gold = document.getElementById("gold");
 const lives = document.getElementById("lives");
 const wave = document.getElementById("wave");
 const startBtn = document.getElementById("startBtn");
+const statusText = document.getElementById("status");
 const gameBoard = document.getElementById("gameBoard");
 
 let gameStarted = false;
+let gameOver = false;
 let currentWave = 1;
 let enemies = [];
 let towers = [];
@@ -17,13 +19,19 @@ function createEnemy() {
     healthBar.classList.add("enemy-health");
     enemy.appendChild(healthBar);
 
-    enemy.health = 3;
+    enemy.health = 3 + currentWave;
     let position = -40;
     gameBoard.appendChild(enemy);
     enemies.push(enemy);
 
     const moveEnemy = setInterval(() => {
-      
+
+        if (gameOver) {
+
+            clearInterval(moveEnemy);
+            return;
+        }
+
         position += 2;
         enemy.style.left = position + "px";
 
@@ -33,6 +41,8 @@ function createEnemy() {
             enemies = enemies.filter(item => item !== enemy);
             enemy.remove();
             lives.textContent = Number(lives.textContent) - 1;
+
+            checkGameOver();
         }
     }, 20);
 
@@ -40,17 +50,23 @@ function createEnemy() {
 }
 
 function startWave() {
-
+    
+    wave.textContent = currentWave;
     let spawned = 0;
     const waveSize = 5 + currentWave;
 
     const waveInterval = setInterval(() => {
 
+        if (gameOver) {
+
+            clearInterval(waveInterval);
+            return;
+        }
+
         createEnemy();
         spawned++;
 
         if (spawned >= waveSize) {
-
             clearInterval(waveInterval);
         }
     }, 1000);
@@ -70,6 +86,13 @@ function createBullet(tower, enemy) {
 
     const bulletMove = setInterval(() => {
 
+        if (!enemy.isConnected) {
+
+            clearInterval(bulletMove);
+            bullet.remove();
+            return;
+        }
+
         const enemyX = enemy.offsetLeft;
         const enemyY = enemy.offsetTop;
 
@@ -87,7 +110,7 @@ function createBullet(tower, enemy) {
             bullet.remove();
             enemy.health--;
 
-            enemy.firstChild.style.width = enemy.health * 11 + "px";
+            enemy.firstChild.style.width = Math.max(enemy.health * 6, 0) + "px";
 
             if (enemy.health <= 0) {
 
@@ -98,15 +121,14 @@ function createBullet(tower, enemy) {
                 gold.textContent = Number(gold.textContent) + 10;
             }
         }
-
-        if (!enemy.isConnected) {
-            clearInterval(bulletMove);
-            bullet.remove();
-        }
     }, 20);
 }
 
 function placeTower(x, y) {
+
+    if (gameOver) {
+        return;
+    }
 
     const currentGold = Number(gold.textContent);
 
@@ -124,7 +146,11 @@ function placeTower(x, y) {
     gold.textContent = currentGold - 20;
 }
 
-function attackEnemies() { setInterval(() => {
+function attackEnemies() {setInterval(() => {
+
+        if (gameOver) {
+            return;
+        }
 
         towers.forEach(tower => {
             const towerX = parseInt(tower.style.left);
@@ -144,6 +170,31 @@ function attackEnemies() { setInterval(() => {
     }, 1000);
 }
 
+function checkGameOver() {
+
+    if (Number(lives.textContent) <= 0) {
+
+        gameOver = true;
+        statusText.textContent = "Game Over";
+        startBtn.disabled = true;
+    }
+}
+
+function waveManager() {setInterval(() => {
+
+        if (gameOver) {
+            return;
+        }
+
+        if (enemies.length === 0 && gameStarted) {
+
+            currentWave++;
+            startWave();
+        }
+
+    }, 3000);
+}
+
 gameBoard.addEventListener("click", event => {
 
     const rect = gameBoard.getBoundingClientRect();
@@ -161,9 +212,9 @@ startBtn.addEventListener("click", () => {
     }
 
     gameStarted = true;
-    startBtn.textContent = "Wave Running";
-    wave.textContent = currentWave;
-    
+    startBtn.textContent = "Game Running";
+
     startWave();
     attackEnemies();
+    waveManager();
 });

@@ -101,3 +101,8 @@ button {
 button:hover {
     opacity: 0.9;
 }
+
+#status {
+    margin-top: 20px;
+    text-align: center;
+}
