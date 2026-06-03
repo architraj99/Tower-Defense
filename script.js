@@ -118,7 +118,7 @@ function createBullet(tower, enemy) {
                 enemies = enemies.filter(item => item !== enemy);
                 enemy.remove();
 
-                gold.textContent = Number(gold.textContent) + 10;
+                gold.textContent = Number(gold.textContent) + (5 + currentWave);
             }
         }
     }, 20);
@@ -132,18 +132,29 @@ function placeTower(x, y) {
 
     const currentGold = Number(gold.textContent);
 
-    if (currentGold < 20) {
+    if (currentGold < 25) {
         return;
     }
+
+    const range = document.createElement("div");
+    range.classList.add("range");
+    range.style.left = x + "px";
+    range.style.top = y + "px";
 
     const tower = document.createElement("div");
     tower.classList.add("tower");
     tower.style.left = x + "px";
     tower.style.top = y + "px";
 
+    gameBoard.appendChild(range);
     gameBoard.appendChild(tower);
-    towers.push(tower);
-    gold.textContent = currentGold - 20;
+
+    towers.push({
+        element: tower,
+        range: 130
+    });
+
+    gold.textContent = currentGold - 25;
 }
 
 function attackEnemies() {setInterval(() => {
@@ -152,7 +163,9 @@ function attackEnemies() {setInterval(() => {
             return;
         }
 
-        towers.forEach(tower => {
+        towers.forEach(towerData => {
+            const tower = towerData.element;
+
             const towerX = parseInt(tower.style.left);
             const towerY = parseInt(tower.style.top);
 
@@ -161,8 +174,7 @@ function attackEnemies() {setInterval(() => {
                 const enemyY = enemy.offsetTop;
                 const distance = Math.hypot(towerX - enemyX, towerY - enemyY);
 
-                if (distance < 150) {
-
+                if (distance < towerData.range) {
                     createBullet(tower, enemy);
                 }
 
@@ -217,6 +229,10 @@ function restartGame() {
         tower.remove();
     });
 
+    document.querySelectorAll(".range").forEach(range => {
+        range.remove();
+    });
+
     enemies = [];
     towers = [];
 
@@ -224,7 +240,7 @@ function restartGame() {
     gameOver = false;
     currentWave = 1;
 
-    gold.textContent = 100;
+    gold.textContent = 75;
     lives.textContent = 10;
     wave.textContent = 1;
 
