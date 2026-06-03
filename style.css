@@ -102,6 +102,10 @@ button:hover {
     opacity: 0.9;
 }
 
+#restartBtn {
+    background: #dc2626;
+}
+
 #status {
     margin-top: 20px;
     text-align: center;

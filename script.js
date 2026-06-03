@@ -2,6 +2,7 @@ const gold = document.getElementById("gold");
 const lives = document.getElementById("lives");
 const wave = document.getElementById("wave");
 const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
 const statusText = document.getElementById("status");
 const gameBoard = document.getElementById("gameBoard");
 
@@ -50,7 +51,7 @@ function createEnemy() {
 }
 
 function startWave() {
-    
+
     wave.textContent = currentWave;
     let spawned = 0;
     const waveSize = 5 + currentWave;
@@ -58,7 +59,6 @@ function startWave() {
     const waveInterval = setInterval(() => {
 
         if (gameOver) {
-
             clearInterval(waveInterval);
             return;
         }
@@ -165,6 +165,7 @@ function attackEnemies() {setInterval(() => {
 
                     createBullet(tower, enemy);
                 }
+
             });
         });
     }, 1000);
@@ -180,7 +181,9 @@ function checkGameOver() {
     }
 }
 
-function waveManager() {setInterval(() => {
+function waveManager() {
+
+    setInterval(() => {
 
         if (gameOver) {
             return;
@@ -193,6 +196,41 @@ function waveManager() {setInterval(() => {
         }
 
     }, 3000);
+}
+
+function restartGame() {
+
+    enemies.forEach(enemy => {
+
+        clearInterval(enemy.moveEnemy);
+
+        if (enemy.isConnected) {
+            enemy.remove();
+        }
+    });
+
+    document.querySelectorAll(".bullet").forEach(bullet => {
+        bullet.remove();
+    });
+
+    document.querySelectorAll(".tower").forEach(tower => {
+        tower.remove();
+    });
+
+    enemies = [];
+    towers = [];
+
+    gameStarted = false;
+    gameOver = false;
+    currentWave = 1;
+
+    gold.textContent = 100;
+    lives.textContent = 10;
+    wave.textContent = 1;
+
+    statusText.textContent = "";
+    startBtn.disabled = false;
+    startBtn.textContent = "Start Game";
 }
 
 gameBoard.addEventListener("click", event => {
@@ -217,4 +255,8 @@ startBtn.addEventListener("click", () => {
     startWave();
     attackEnemies();
     waveManager();
+});
+
+restartBtn.addEventListener("click", () => {
+    restartGame();
 });
