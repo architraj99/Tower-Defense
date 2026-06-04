@@ -13,7 +13,7 @@ As the waves increase, enemies become stronger and the game becomes more challen
 * Once you placed the tower on map it will automatically hit the enemies
 * also enemy have some health... which decay at every shot from the tower
 * Gold and economy system
-* Game over system when you loose
+* Game over system when you lose
 * Restart button so you can try again
 * Tower attack range 
 * the more higher you will kill the higher rewards will be there
@@ -35,3 +35,4 @@ As the waves increase, enemies become stronger and the game becomes more challen
 * Java
 
 # SCREENSHOT
+<img width="1458" height="770" alt="image" src="https://github.com/user-attachments/assets/b38865c8-4044-472a-8595-104efdfd7ac6" />
